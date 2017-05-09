@@ -31,7 +31,7 @@ if (process.argv[2] === '-remove') {
   const jsonFileName = process.argv[3];
   if (!jsonFileName) { throw Exception('Json document is not provided'); }
   readDocumentJson(jsonFileName, (doc) => {
-    delete doc._rev;
+    delete doc._rev; delete doc.rev;
     writeDocumentJson(jsonFileName, doc);
   });
 } else if (process.argv[2] === '-inject') {
