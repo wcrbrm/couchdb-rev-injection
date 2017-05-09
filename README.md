@@ -13,6 +13,7 @@ Batch File Example
 @set DB=mydb
 @set DOC=--Config
 @set FILENAME=--Config.json
-curl -s http://localhost:5984/%DB%/%DOC% | node rev.js | node rev -inject %FILENAME%
+curl -s http://localhost:5984/%DB%/%DOC% | node rev.js | node rev.js -inject %FILENAME%
 curl -X PUT -H "Content-Type: application/json" http://localhost:5984/%DB%/%DOC% -d @%FILENAME%
+node rev.js -remove %FILENAME%
 ```
