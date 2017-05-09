@@ -17,3 +17,15 @@ curl -s http://localhost:5984/%DB%/%DOC% | node rev.js | node rev.js -inject %FI
 curl -X PUT -H "Content-Type: application/json" http://localhost:5984/%DB%/%DOC% -d @%FILENAME%
 node rev.js -remove %FILENAME%
 ```
+
+Shell File Example
+===
+```
+#!/bin/bash
+export DB=mydb
+export DOC=_design/backend
+export FILENAME=design_backend.json
+curl -s http://localhost:5984/$DB/$DOC | node rev.js | node rev.js -inject $FILENAME
+curl -X PUT -H "Content-Type: application/json" http://localhost:5984/4DB/$DOC -d @$FILENAME
+node rev.js -remove $FILENAME
+```
