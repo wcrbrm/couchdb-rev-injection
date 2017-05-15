@@ -5,9 +5,10 @@ const readRevisionFromStdin = (callback) => {
   process.stdin.setEncoding('utf8');
   process.stdin.on('readable', () => {
     const chunk = process.stdin.read();
-    if (chunk !== null) { rev += chunk; }
+    if (chunk) { rev += chunk; }
   });
   process.stdin.on('end', () => {
+    if (!rev) process.stderr.write('No Revision Provided');
     callback(rev.trim());
   });
 }
@@ -29,7 +30,7 @@ const writeDocumentJson = (name, doc, callback) => {
 
 if (process.argv[2] === '-remove') {
   const jsonFileName = process.argv[3];
-  if (!jsonFileName) { throw Exception('Json document is not provided'); }
+  if (!jsonFileName) { throw Exception('Json document is not provided\n'); }
   readDocumentJson(jsonFileName, (doc) => {
     delete doc._rev; delete doc.rev;
     writeDocumentJson(jsonFileName, doc);
@@ -37,11 +38,11 @@ if (process.argv[2] === '-remove') {
 } else if (process.argv[2] === '-inject') {
 
   const jsonFileName = process.argv[3];
-  if (!jsonFileName) { throw Exception('Json document is not provided'); }
+  if (!jsonFileName) { throw Exception('Json document is not provided\n'); }
   readDocumentJson(jsonFileName, (doc) => {
     // process.stdout.write(JSON.stringify(doc, null, 2) + "\n");   
     readRevisionFromStdin((rev) =>  {
-      process.stdout.write('rev: ' + rev);
+      process.stdout.write('\nrev: ' + rev);
       if (rev) {
         doc._rev = rev;
         writeDocumentJson(jsonFileName, doc);
@@ -55,11 +56,11 @@ if (process.argv[2] === '-remove') {
   process.stdin.setEncoding('utf8');
   process.stdin.on('readable', () => {
     const chunk = process.stdin.read();
-    if (chunk !== null) { jsonData += chunk; }
+    if (chunk) { jsonData += chunk; }
   });
   process.stdin.on('end', () => {
     const data = JSON.parse(jsonData);
-    process.stdout.write(data._rev);
+    if (data && data._rev) process.stdout.write(data._rev);
   });
 
 }
