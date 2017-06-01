@@ -28,7 +28,14 @@ const writeDocumentJson = (name, doc, callback) => {
   });  
 };
 
-if (process.argv[2] === '-remove') {
+if (process.argv[2] === '-id') {
+  const jsonFileName = process.argv[3];
+  if (!jsonFileName) { throw Exception('Json document is not provided\n'); }
+  readDocumentJson(jsonFileName, (doc) => {
+    if (doc && doc._id) process.stdout.write(doc._id);
+  });
+
+} else if (process.argv[2] === '-remove') {
   const jsonFileName = process.argv[3];
   if (!jsonFileName) { throw Exception('Json document is not provided\n'); }
   readDocumentJson(jsonFileName, (doc) => {
